@@ -1,22 +1,30 @@
-// script-crypto.js
-async function loadCryptoData() {
-  const res = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7");
-  const data = await res.json();
-  const prices = data.prices.map(item => item[1]);
-  const labels = data.prices.map(item => new Date(item[0]).toLocaleDateString());
-
-  const ctx = document.getElementById("cryptoChart").getContext("2d");
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'BTC Price (USD)',
-        data: prices,
-        borderColor: 'green',
-        fill: false
-      }]
-    }
-  });
+async function fetchCryptoData() {
+  const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd');
+  const data = await response.json();
+  displayCrypto(data);
 }
-loadCryptoData();
+
+function displayCrypto(coins) {
+  const table = document.getElementById("cryptoTable");
+  table.innerHTML = "";
+
+  const search = document.getElementById("searchInput").value.toLowerCase();
+
+  coins
+    .filter(coin => coin.name.toLowerCase().includes(search))
+    .forEach(coin => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${coin.name}</td>
+        <td>${coin.symbol.toUpperCase()}</td>
+        <td>$${coin.current_price}</td>
+        <td style="color:${coin.price_change_percentage_24h >= 0 ? 'green' : 'red'};">
+          ${coin.price_change_percentage_24h.toFixed(2)}%
+        </td>
+      `;
+      table.appendChild(row);
+    });
+}
+
+document.getElementById("searchInput").addEventListener("input", fetchCryptoData);
+window.onload = fetchCryptoData;
