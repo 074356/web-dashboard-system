@@ -62,7 +62,7 @@
   <script>
     let chart;
 
-    async function fetchTopCoins() {
+    window.onload = async function () {
       const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&page=1&sparkline=false";
       const res = await fetch(url);
       const data = await res.json();
@@ -93,6 +93,16 @@
           }]
         },
         options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true
+            },
+            title: {
+              display: true,
+              text: 'Top 5 Cryptocurrencies by Market Cap'
+            }
+          },
           scales: {
             y: {
               beginAtZero: false
@@ -100,9 +110,7 @@
           }
         }
       });
-    }
-
-    fetchTopCoins();
+    };
   </script>
 
 </body>
