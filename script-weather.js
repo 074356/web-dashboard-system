@@ -1,22 +1,24 @@
-// script-weather.js
 async function getWeather() {
   const city = document.getElementById("cityInput").value;
   const apiKey = "06bba629fa20cb6ecda05a946534f60a"; // Replace with your key
-  const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`);
-  const data = await response.json();
-  const temps = data.list.slice(0, 6).map(item => item.main.temp);
-  const labels = data.list.slice(0, 6).map(item => item.dt_txt);
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-  const ctx = document.getElementById("weatherChart").getContext("2d");
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Temperature (°C)',
-        data: temps,
-        backgroundColor: 'rgba(0, 123, 255, 0.5)'
-      }]
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.cod === 200) {
+      document.getElementById("weatherResult").innerHTML = `
+        <h3>${data.name}, ${data.sys.country}</h3>
+        <p><strong>Temperature:</strong> ${data.main.temp} °C</p>
+        <p><strong>Weather:</strong> ${data.weather[0].description}</p>
+        <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
+      `;
+    } else {
+      document.getElementById("weatherResult").innerText = "City not found.";
     }
-  });
+  } catch (error) {
+    console.error("Error fetching weather:", error);
+    document.getElementById("weatherResult").innerText = "Failed to load weather data.";
+  }
 }
