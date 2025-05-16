@@ -3,16 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <title>Web Dashboard System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f2f2f2;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #333;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #555;
+    }
+
+    .btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      text-decoration: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    .weather-btn {
+      background-color: #4CAF50;
+    }
+
+    .crypto-btn {
+      background-color: #2196F3;
+    }
+
+    .about-section {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
 </head>
 <body>
+
   <h1>🌐 Web Dashboard System</h1>
   <p>Select a dashboard to view real-time data:</p>
 
   <div style="margin-top: 30px;">
-    <a href="dashboard1.html" style="display: inline-block; margin: 10px; padding: 12px 24px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 8px;">🌦 Weather Dashboard</a>
-
-    <a href="dashboard2.html" style="display: inline-block; margin: 10px; padding: 12px 24px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 8px;">💰 Crypto Dashboard</a>
+    <a href="dashboard1.html" class="btn weather-btn">🌦 Weather Dashboard</a>
+    <a href="dashboard2.html" class="btn crypto-btn">💰 Crypto Dashboard</a>
   </div>
+
+  <div class="about-section">
+    <h2>👤 About Me</h2>
+    <p>
+      I am a student passionate about real-time data and web development.
+      This project showcases two interactive dashboards using public APIs:
+      <strong>OpenWeatherMap</strong> for live weather data and
+      <strong>CoinGecko</strong> for cryptocurrency prices.
+      Built with HTML, CSS, and JavaScript, the site is deployed using GitHub Pages
+      with proper CI/CD practices.
+    </p>
+  </div>
+
 </body>
 </html>
