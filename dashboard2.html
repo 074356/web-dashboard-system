@@ -2,25 +2,108 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Crypto Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+  <title>💰 Crypto Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f9fbe7;
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #388e3c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #crypto-info {
+      margin-top: 30px;
+    }
+
+    canvas {
+      margin-top: 30px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #388e3c;
+    }
+  </style>
 </head>
 <body>
-  <h1>Crypto Dashboard</h1>
 
-  <input type="text" id="searchInput" placeholder="Search crypto by name">
-  <table border="1">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Symbol</th>
-        <th>Price (USD)</th>
-        <th>Change (24h)</th>
-      </tr>
-    </thead>
-    <tbody id="cryptoTable"></tbody>
-  </table>
+  <h1>💰 Crypto Dashboard</h1>
+  <p>Get live prices of top 5 cryptocurrencies</p>
 
-  <script src="script-crypto.js"></script>
+  <div id="crypto-info"></div>
+  <canvas id="cryptoChart"></canvas>
+
+  <a href="index.html">← Back to Home</a>
+
+  <script>
+    let chart;
+
+    async function fetchTopCoins() {
+      const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=5&page=1&sparkline=false";
+      const res = await fetch(url);
+      const data = await res.json();
+
+      let names = [];
+      let prices = [];
+      let html = "<h3>Top 5 Cryptocurrencies</h3>";
+
+      data.forEach(coin => {
+        names.push(coin.name);
+        prices.push(coin.current_price);
+        html += `<p><strong>${coin.name}</strong>: $${coin.current_price.toLocaleString()}</p>`;
+      });
+
+      document.getElementById("crypto-info").innerHTML = html;
+
+      const ctx = document.getElementById('cryptoChart').getContext('2d');
+      if (chart) chart.destroy();
+
+      chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: names,
+          datasets: [{
+            label: 'Current Price (USD)',
+            data: prices,
+            backgroundColor: ['#ff9800', '#fbc02d', '#8bc34a', '#4caf50', '#009688']
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: false
+            }
+          }
+        }
+      });
+    }
+
+    fetchTopCoins();
+  </script>
+
 </body>
 </html>
